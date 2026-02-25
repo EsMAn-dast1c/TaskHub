@@ -30,15 +30,14 @@ public sealed class Startup
     /// <summary>
     /// Регистрация сервисов
     /// </summary>
-    /// <param name="services">Коллекция сервисов</param>
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
         services.AddDal();
         services.AddLogic();
-        
+
         services.AddScoped<IManageUserUseCase, ManageUserUseCase>();
-        
+
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
@@ -66,7 +65,6 @@ public sealed class Startup
     /// <summary>
     /// Конфигурация middleware пайплайна
     /// </summary>
-    /// <param name="app">Построитель приложения</param>
     public void Configure(IApplicationBuilder app)
     {
         if (Environment.IsDevelopment())
@@ -78,6 +76,10 @@ public sealed class Startup
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskHub API v1");
             });
         }
+
+        // НАШИ MIDDLEWARE ДОЛЖНЫ БЫТЬ ДО ROUTING
+        app.UseMiddleware<ResponseTimeMiddleware>();
+        app.UseMiddleware<StudentHeadersMiddleware>();
 
         app.UseRouting();
 
