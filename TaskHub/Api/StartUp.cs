@@ -1,3 +1,4 @@
+using Api.DiDemo;
 using Api.UseCases.Users;
 using Api.UseCases.Users.Interfaces;
 using Dal;
@@ -36,9 +37,9 @@ public sealed class Startup
         services.AddControllers();
         services.AddDal();
         services.AddLogic();
-        
+
         services.AddScoped<IManageUserUseCase, ManageUserUseCase>();
-        
+
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
@@ -61,6 +62,18 @@ public sealed class Startup
                 Version = "v1"
             });
         });
+
+        // Singleton
+        services.AddSingleton<SingletonService1>();
+        services.AddSingleton<SingletonService2>();
+
+        // Scoped
+        services.AddScoped<ScopedService1>();
+        services.AddScoped<ScopedService2>();
+
+        // Transient
+        services.AddTransient<TransientService1>();
+        services.AddTransient<TransientService2>();
     }
 
     /// <summary>
