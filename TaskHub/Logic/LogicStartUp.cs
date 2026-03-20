@@ -1,5 +1,6 @@
 ﻿using Logic.Users.Services;
 using Logic.Users.Services.Interfaces;
+using Logic.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logic;
@@ -15,6 +16,10 @@ public static class LogicStartUp
     /// <param name="services">Коллекция сервисов</param>
     public static void AddLogic(this IServiceCollection services)
     {
+        // Users
         services.AddScoped<IUserService, UserService>();
+
+        // Tasks
+        services.AddScoped<ITaskService, TaskService>();
     }
 }

@@ -17,7 +17,14 @@ public static class DalStartUp
     /// <param name="services">Коллекция сервисов</param>
     public static void AddDal(this IServiceCollection services)
     {
+        // DbContext
         services.AddDatabase<UserDbContext>();
+        services.AddDatabase<TaskDbContext>();
+
+        // Users
         services.AddScoped<IUserRepository, UserRepository>();
+
+        // Tasks
+        services.AddScoped<ITaskRepository, TaskRepository>();
     }
 }
