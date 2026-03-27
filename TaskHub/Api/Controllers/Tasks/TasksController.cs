@@ -1,4 +1,5 @@
-﻿using Api.Controllers.Tasks.Request;
+﻿using Api.Attributes;
+using Api.Controllers.Tasks.Request;
 using Api.Controllers.Tasks.Response;
 using Logic.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,6 @@ namespace Api.Controllers.Tasks;
 [Route("tasks")]
 public sealed class TasksController : ControllerBase
 {
-    /// <summary>
-    /// Сервис работы с задачами
-    /// </summary>
     private readonly ITaskService _taskService;
 
     public TasksController(ITaskService taskService)
@@ -71,9 +69,9 @@ public sealed class TasksController : ControllerBase
     /// <summary>
     /// Получить задачу по идентификатору
     /// </summary>
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<TaskResponse>> GetTaskByIdAsync(
-        [FromRoute] Guid id,
+        [FromRouteTaskId] Guid id,
         CancellationToken cancellationToken)
     {
         var task = await _taskService.GetTaskByIdAsync(id, cancellationToken);
@@ -97,9 +95,9 @@ public sealed class TasksController : ControllerBase
     /// <summary>
     /// Изменить название задачи
     /// </summary>
-    [HttpPut("{id:guid}/title")]
+    [HttpPut("{id}/title")]
     public async Task<IActionResult> SetTaskTitleAsync(
-        [FromRoute] Guid id,
+        [FromRouteTaskId] Guid id,
         [FromBody] SetTaskTitleRequest request,
         CancellationToken cancellationToken)
     {
@@ -110,9 +108,9 @@ public sealed class TasksController : ControllerBase
     /// <summary>
     /// Удалить задачу по идентификатору
     /// </summary>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTaskByIdAsync(
-        [FromRoute] Guid id,
+        [FromRouteTaskId] Guid id,
         CancellationToken cancellationToken)
     {
         var deleted = await _taskService.DeleteTaskByIdAsync(id, cancellationToken);
