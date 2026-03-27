@@ -1,4 +1,5 @@
 ﻿using Api.Attributes;
+using Api.Controllers.Filters;
 using Api.Controllers.Tasks.Request;
 using Api.Controllers.Tasks.Response;
 using Logic.Tasks;
@@ -11,6 +12,8 @@ namespace Api.Controllers.Tasks;
 /// </summary>
 [ApiController]
 [Route("tasks")]
+[ServiceFilter(typeof(StudentInfoHeadersFilter))]
+[ServiceFilter(typeof(RequestLoggingFilter))]
 public sealed class TasksController : ControllerBase
 {
     private readonly ITaskService _taskService;
@@ -24,6 +27,7 @@ public sealed class TasksController : ControllerBase
     /// Создать задачу
     /// </summary>
     [HttpPost]
+    [ServiceFilter(typeof(ValidateCreateTaskRequestFilter))]
     public async Task<ActionResult<TaskResponse>> CreateTaskAsync(
         [FromBody] CreateTaskRequest request,
         CancellationToken cancellationToken)
@@ -96,6 +100,7 @@ public sealed class TasksController : ControllerBase
     /// Изменить название задачи
     /// </summary>
     [HttpPut("{id}/title")]
+    [ServiceFilter(typeof(ValidateSetTaskTitleRequestFilter))]
     public async Task<IActionResult> SetTaskTitleAsync(
         [FromRouteTaskId] Guid id,
         [FromBody] SetTaskTitleRequest request,
